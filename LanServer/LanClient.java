@@ -40,8 +40,7 @@ public class LanClient implements Network{
             
             //Main loop implementing client logic
             while(!server.getSocket().isClosed()){
-                sendObject(server, "Hello server!");
-                try{Thread.sleep(1000);} catch(Exception e){}  
+                // Implement logic here
             }
 
             closeConnection();
