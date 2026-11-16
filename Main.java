@@ -6,6 +6,5 @@ public class Main {
      * @param args command-line arguments passed to the program
      */
     public static void main(String[] args) {
-        balls
     }
 }
