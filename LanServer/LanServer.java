@@ -1,12 +1,13 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * A LAN (Local Area Network) server that handles connections with clients
  * <p>Implements {@link #Network}
  */
-public class LanServer implements Network{
+public class LanServer implements Network, Server{
 
     /** The ServerSocket that the server is hosted on */
     private ServerSocket server;
@@ -100,12 +101,14 @@ public class LanServer implements Network{
      * @param _client The client's Connection to start an InputStream from
      */
     public void startInputStream(Connection _client){
+        
         Thread clientInputStream = new Thread(() -> {
             try{
                 //Gets the client's input stream
                 ObjectInputStream in = _client.getInputStream();
 
                 //Handles all inputs sent to the server
+
                 while(!_client.getSocket().isClosed()){
                     Object o = in.readObject();
 
@@ -157,4 +160,5 @@ public class LanServer implements Network{
         System.out.println("Server closed");
         System.exit(-1);
     }
+
 }

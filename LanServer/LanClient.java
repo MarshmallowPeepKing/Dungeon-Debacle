@@ -5,7 +5,7 @@ import java.net.*;
  * The main client class that manages client connections to the LAN server
  * <p>Implements {@link #Network}
  */
-public class LanClient implements Network{
+public class LanClient implements Network, Client{
     // public ArrayList<QueueObject> queue = new ArrayList<>();
 
     /** The LAN IPv4 address of the server */
@@ -15,7 +15,7 @@ public class LanClient implements Network{
     private int port;
 
     /** The Connection to the server which includes the ServerSocket, ObjectInputStream, and ObjectOutputStream */
-    private Connection server;
+    Connection server;
 
     /**
      * A LanClient that handles a connection to a server
@@ -37,7 +37,7 @@ public class LanClient implements Network{
 
             //Starts an ObjectInputStream with the server on a thread
             startInputStream(server);
-            
+
             //Main loop implementing client logic
             while(!server.getSocket().isClosed()){
                 // Implement logic here
@@ -54,8 +54,8 @@ public class LanClient implements Network{
      * @param _object The object to send to the server
      * @return True if the object was successfully sent or false if it failed to send
      */
-    public boolean sendObject(Connection _server, Object _object){
-        if(!_server.getSocket().isClosed()){
+    public boolean sendObject(Object _object){
+        if(!server.getSocket().isClosed()){
             try{
                 //Gets the current output stream
                 ObjectOutputStream out = server.getOutputStream();

@@ -31,25 +31,32 @@ public class Launcher {
         //If launching a server, runs a server on a new thread
         //Threads are utilized to allow the launcher to continue running other code while managing the server separately
         if(result.toLowerCase().equals("server")){
-            Thread serverThread = new Thread(() -> {
-                LanServer server = new LanServer(8080);
-                server.startServer();
-            });
-            serverThread.start();
+            launchServer();
         }
 
         //Otherwise if launching a client, runs a client on a new thread
         //Threads are utilized to allow the launcher to continue running other code while managing the server separately
         else if(result.toLowerCase().equals("client")){
-
-            String hostIP = "192.168.56.1";
-            int port = 8080;
-
-            Thread clientThread = new Thread(() -> {
-                LanClient client = new LanClient(hostIP, port);
-                client.joinServer();
-            });
-            clientThread.start();
+            launchClient();
         }
+    }
+
+    public static void launchServer(){
+        Thread serverThread = new Thread(() -> {
+            LanServer server = new LanServer(8080);
+            server.startServer();
+        });
+        serverThread.start();
+    }
+
+    public static void launchClient(){
+        String hostIP = "192.168.56.1";
+        int port = 8080;
+
+        Thread clientThread = new Thread(() -> {
+            LanClient client = new LanClient(hostIP, port);
+            client.joinServer();
+        });
+        clientThread.start();
     }
 }
