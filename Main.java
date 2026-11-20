@@ -8,37 +8,71 @@ public class Main {
      * @param args command-line arguments passed to the program
      */
     public static void main(String[] args) {
-        //Creating a server
-        LanServer server = new LanServer(8080);
-        Thread serverThread = new Thread(() -> {
-            server.startServer();
-        });
-        serverThread.start();
 
-        //Hosting a game (this uses a scanner as we don't have GUI yet)
-        System.out.println("How many players (2-16)");
-        PlayerClient[] players = new PlayerClient[getIntRange(2, 16)];
+        Player player = new Player("Jose");
 
-        //Arbitrary list of names
-        ArrayList<String> names = new ArrayList<>(Arrays.asList("Dave", "Also Dave", "NoobSlayer6969", "<404> Error not found", "Steve", "Leonardo DaVinci", "Picasso", "Abraham_Lincoln77", "Master of Puppets", "Nobody", "AlexanderTheGr8t1059", "John Wilkes Photobooth", "xXKingGreatTheLegendXx", "NateWantsToBattle"));
-        for(int i = 0; i < players.length; i++){
-            players[i] = new PlayerClient(names.remove((int)(Math.random() * names.size())), "127.0.0.1", 8080);
-        }
+        Room room = RoomDatabase.getRoom("Room 2");
 
-        for(int i = 0; i < players.length; i++){
-            System.out.println(players[i]);
-        }
+        room.setPos((Player) player, 0, 0);
 
-    }
-
-    public static int getIntRange(int min, int max){
         Scanner sc = new Scanner(System.in);
-        int num = sc.nextInt();
-        while(num > max || num < min){
-            System.out.println("Please input a number within the range");
-            num = sc.nextInt();
+        while(true){
+
+            updateRoom(room);
+
+            switch(sc.nextLine().toLowerCase()){
+                case "left", "a":
+                    moveLeft(room, player);
+                    break;
+                    
+                case "right", "d":
+                    moveRight(room, player);
+                    break;
+                    
+                case "up", "w":
+                    moveUp(room, player);
+                    break;
+                    
+                case "down", "s":
+                    moveDown(room, player);
+                    break;
+            }
+
+            if(!room.gameObjectTypeExists(Item.class)){
+                break;
+            }
         }
+        updateRoom(room);
+
         sc.close();
-        return num;
+        System.out.println("You Win!");
     }
+    
+    static void clearTerminal(){
+        try{new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();} catch(Exception e){}
+        System.out.flush();
+    }
+
+    static void updateRoom(Room room){
+        clearTerminal();
+        System.out.println(room);
+    }
+
+    static void moveUp(Room room, GameObject player){
+        if(player.getClass().equals(Player.class)) player = (Player) player;
+        room.setPos(player, room.getPos(player)[0], room.getPos(player)[1] - 1);
+    }
+    static void moveDown(Room room, GameObject player){
+        if(player.getClass().equals(Player.class)) player = (Player) player;
+        room.setPos(player, room.getPos(player)[0], room.getPos(player)[1] + 1);
+    }
+    static void moveRight(Room room, GameObject player){
+        if(player.getClass().equals(Player.class)) player = (Player) player;
+        room.setPos(player, room.getPos(player)[0] + 1, room.getPos(player)[1]);
+    }
+    static void moveLeft(Room room, GameObject player){
+        if(player.getClass().equals(Player.class)) player = (Player) player;
+        room.setPos(player, room.getPos(player)[0] - 1, room.getPos(player)[1]);
+    }
+
 }
