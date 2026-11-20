@@ -1,7 +1,6 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * A LAN (Local Area Network) server that handles connections with clients
